@@ -22,7 +22,7 @@ echo 'PHP is up <tr>'
             <fb:login-button></fb:login-button>
 
             <div id="err" style="display:none">No Error</div>
-            <img id="image" src="boris.jpg" alt="My photo"/>
+            <img id="image" src="adam.jpg" alt="My photo"/>
         </div>
 
         <script type="text/javascript">
@@ -32,7 +32,7 @@ echo 'PHP is up <tr>'
 
             function tagger_error(err)
             {
-                console.log('Got face.com error: ' + err.error_code + ' [' + err.error_message + ']')
+                //console.log('Got face.com error: ' + err.error_code + ' [' + err.error_message + ']')
                 if (err.error_code && err.error_message) {
                     $("#err").show().html("<b>" + err.error_code + "</b>: " + err.error_message);
                 } else {
@@ -40,7 +40,7 @@ echo 'PHP is up <tr>'
                 }
             }
             function detectFaces() {
-                console.log('Start tagger... [' + osession + ']');
+                //console.log('Start tagger... [' + osession + ']');
                 FaceTagger.load("#image", {
                     click_add_tag: true,
                     resizable: true,
@@ -55,35 +55,28 @@ echo 'PHP is up <tr>'
                     });    
             }
             
-            // Facebook Function- called when the user is connected to Facebook
             function loadFacebook()
             {
                 FB.getLoginStatus(function (response) {
                     osession = response.session;
-                    if (osession != null)
-                    {
-//                        $("#fblogin").hide();
-//                        $("#fblogout").show();
-                    }
                     detectFaces();
                 });
             }
-
-            $(document).ready(function(){
-            });
 
             </script>
 
             <div id="fb-root"></div>
             <script src="http://connect.facebook.net/en_US/all.js"></script>
             <script>
-                FB.init({appId: '154182797934057', status: true, cookie: true, xfbml: true});
+// appId: '154182797934057',
+                FB.init({apiKey: '08c94f58e2704728cb16f915d49d2c38',status: true, cookie: true, xfbml: true});
+
                 FB.Event.subscribe('auth.sessionChange', function(response) {
                     if (response.session) {
-                        console.log('FB user logged IN: ' + response.session);
+                        //console.log('FB user logged IN: ' + response.session);
                         loadFacebook();  
                     } else {
-                        console.log('FB user logged OUT')
+                        //console.log('FB user logged OUT')
                 }
             });
         </script>    
