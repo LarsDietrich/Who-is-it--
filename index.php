@@ -1,8 +1,22 @@
 <?php
+# Get cleaned parameter
+$file = preg_replace('/[^a-zA-Z0-9.]/', '_', $_GET['file']);
+
+if (!$file || !file_exists("upload/".$file)) 
+{
+    header("Location: upload.php");
+    exit();
+}
+
 $keyfile = "keys.txt";
 $fh = fopen($keyfile, "r");
 $fb_key = fgets($fh);
 $face_key = fgets($fh);
+$local = fgets($fh);
+if ($local == 'debug'.chr(10)) 
+    $DEBUG = true;
+else
+    $DEBUG = false;
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
@@ -19,6 +33,12 @@ $face_key = fgets($fh);
     </head>
     <body>
         <div>
+<?php
+        if ($DEBUG)
+            echo "debug mode";
+        else
+            echo "Prod";
+?>
         <h1>Welcome <span id="name"></span></h1>
             <div id="fb_login" style="display:none">
                 <p>Please loging with Facebook so we can try matching this photos with your friends</p>
@@ -27,7 +47,14 @@ $face_key = fgets($fh);
 
             <div id="err" style="display:none">No Error</div>
             <div id="image_wrapper">
-                <img id="image" src="http://who.itlater.com/adam.jpg" alt="My photo"/>
+                <img id="image" 
+<?php
+                if ($DEBUG)
+                    echo 'src="http://who.itlater.com/adam.jpg"';
+                else
+                    echo 'src="upload/'.$file.'"';
+?>
+                    alt="My photo"/>
             </div>
         </div>
 
@@ -59,12 +86,10 @@ $face_key = fgets($fh);
                     });    
             }
             
-            function loadFacebook()
+            function facebookReady()
             {
-                FB.getLoginStatus(function (response) {
-                    osession = response.session;
-                    detectFaces();
-                });
+                $("#name").html(getFacebookName(osession.uid + '@facebook.com', osession.uid));  
+                detectFaces();
             }
 
             $(document).ready(function() {  });
@@ -85,9 +110,8 @@ $face_key = fgets($fh);
 
                 FB.Event.subscribe('auth.sessionChange', function(response) {
                     if (response.session) {
-                        loadFacebook2(function() { 
-                            $("#name").html(getFacebookName(osession.uid + '@facebook.com', osession.uid)); });  
-                        loadFacebook();  
+                        osession = response.session;
+                        loadFacebook(facebookReady);
                     } else {
                 }
             });

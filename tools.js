@@ -429,7 +429,7 @@ function closeDialog()
 	$("#screen, #dialog").remove();
 }
 
-function loadFacebook2(callback)
+function loadFacebook(callback)
 {
 	FB.getLoginStatus(function(response) {	
 		var osession = response.session;        
