@@ -1,10 +1,8 @@
 <?php
-
-define('FACEBOOK_APP_ID', '154182797934057');
-define('FACEBOOK_SECRET', 'c8ec1022482ef76b77405945c75291ca');
-
-echo 'PHP is up <tr>'
-
+$keyfile = "keys.txt";
+$fh = fopen($keyfile, "r");
+$fb_key = fgets($fh);
+$face_key = fgets($fh);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
@@ -21,7 +19,7 @@ echo 'PHP is up <tr>'
     </head>
     <body>
         <div>
-            <h1>Welcome</h1>
+        <h1>Welcome <span id="name"></span></h1>
             <fb:login-button></fb:login-button>
 
             <div id="err" style="display:none">No Error</div>
@@ -33,11 +31,10 @@ echo 'PHP is up <tr>'
         <script type="text/javascript">
             var osession;
 
-            FaceClientAPI.init('8430cdf2fe6d5f7a93944bb9d0007ee5');
+            FaceClientAPI.init(<?=$face_key?>);
 
             function tagger_error(err)
             {
-                //console.log('Got face.com error: ' + err.error_code + ' [' + err.error_message + ']')
                 if (err.error_code && err.error_message) {
                     $("#err").show().html("<b>" + err.error_code + "</b>: " + err.error_message);
                 } else {
@@ -45,7 +42,6 @@ echo 'PHP is up <tr>'
                 }
             }
             function detectFaces() {
-                console.log('Start tagger... [' + osession + ']');
                 FaceTagger.load("#image", {
                     click_add_tag: true,
                     resizable: true,
@@ -64,7 +60,7 @@ echo 'PHP is up <tr>'
             {
                 FB.getLoginStatus(function (response) {
                     osession = response.session;
-                    detectFaces();
+                                        detectFaces();
                 });
             }
 
@@ -75,16 +71,13 @@ echo 'PHP is up <tr>'
             <div id="fb-root"></div>
             <script src="http://connect.facebook.net/en_US/all.js"></script>
             <script>
-// appId: '154182797934057',
-                FB.init({apiKey: '08c94f58e2704728cb16f915d49d2c38',status: true, cookie: true, xfbml: true});
-
+                FB.init({apiKey: <?=$fb_key?>, status: true, cookie: true, xfbml: true});
                 FB.Event.subscribe('auth.sessionChange', function(response) {
                     if (response.session) {
-                        console.log('FB user logged IN: ' + response.session);
-                        loadFacebook2();  
+                        loadFacebook2(function() { 
+                            $("#name").html(getFacebookName(osession.uid + '@facebook.com', osession.uid)); });  
                         loadFacebook();  
                     } else {
-                        console.log('FB user logged OUT')
                 }
             });
         </script>    

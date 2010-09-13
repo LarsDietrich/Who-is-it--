@@ -196,8 +196,6 @@ function Face_Tagger(_FaceClientAPI)
                                 'user_auth':'fb_user:'+m_fbUser+',fb_session:'+m_fbSession };
 //		namespace train owners_ids callback_url
 
-                console.log('Starting faces detect... ' + options);
-
 				FaceClientAPI.faces_recognize(srcs, options, function(url, data){
 					if (!validateAPIResponse(data))
 					{						
@@ -459,7 +457,6 @@ function Face_Tagger(_FaceClientAPI)
 			
 			$.each(aTags, function(i, item){
 				var name = !empty(item.label)? item.label : (item.uids.length > 0 && !empty(item.uids[0].uid) ? item.uids[0].uid : TAG_TEXT_UNKNOWN);
-                console.log('Name: ' + item.label);
 				
 				if (!empty(item.gid))
 					name = name.replace('{0}', item.gid);

@@ -429,9 +429,8 @@ function closeDialog()
 	$("#screen, #dialog").remove();
 }
 
-function loadFacebook2(response)
+function loadFacebook2(callback)
 {
-    console.log('LoadFacebook 2');
 	FB.getLoginStatus(function(response) {	
 		var osession = response.session;        
 		if (osession != null)
@@ -544,6 +543,9 @@ function loadFacebook2(response)
 					$('.actions').append(fbFriends);
 					$(".facebook-friends").removeClass("disabled").attr("title", "Show Facebook friends");
 					hideFBFriends();
+
+                    if (callback)
+                        callback();
 				}
 			);
 		}
@@ -720,7 +722,6 @@ function drawDataOnImage(data, img)
 	{
 		var maxImageWidth = 640;
 		var maxImageSizeInEngine = 900;
-        console.log('Starting to draw..');
 		
 		$.each(data.photos, function(i, item){
 			var wId = "w_" + Math.round(Math.random()*100000);
@@ -776,15 +777,11 @@ function drawDataOnImage(data, img)
 						
 					var name = tag.label || uid;
 
-                    console.log('Drawing for: ' + name);
-					
 					name = (name == undefined || name == '') && (tag.gid != null) ? "Group " + tag.gid : name;
 					name = (name == undefined || name == '')? "Unknown" : name;
 					
 					name = getFacebookName(uid, name);
 
-                    console.log('Got facebook name: ' + name);
-					
 					var oTag = drawTag('#' + wId, name, img, tag.center.x, tag.center.y, tag.width, tag.height, item.width, item.height, tag.uids);
 					var oInnerTag = oTag.find(".f_inner_tag");
 					
