@@ -20,7 +20,10 @@ $face_key = fgets($fh);
     <body>
         <div>
         <h1>Welcome <span id="name"></span></h1>
-            <fb:login-button></fb:login-button>
+            <div id="fb_login" style="display:none">
+                <p>Please loging with Facebook so we can try matching this photos with your friends</p>
+                <fb:login-button></fb:login-button>
+            </div>
 
             <div id="err" style="display:none">No Error</div>
             <div id="image_wrapper">
@@ -60,7 +63,7 @@ $face_key = fgets($fh);
             {
                 FB.getLoginStatus(function (response) {
                     osession = response.session;
-                                        detectFaces();
+                    detectFaces();
                 });
             }
 
@@ -72,6 +75,14 @@ $face_key = fgets($fh);
             <script src="http://connect.facebook.net/en_US/all.js"></script>
             <script>
                 FB.init({apiKey: <?=$fb_key?>, status: true, cookie: true, xfbml: true});
+                FB.getLoginStatus(function(response) {
+                    if (response.session) {
+                        $("#fb_login").hide();
+                    } else {
+                        $("#fb_login").show();
+                    }
+                });
+
                 FB.Event.subscribe('auth.sessionChange', function(response) {
                     if (response.session) {
                         loadFacebook2(function() { 
