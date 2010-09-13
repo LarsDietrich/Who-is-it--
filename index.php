@@ -55,11 +55,19 @@ echo 'PHP is up <tr>'
                     });    
             }
             
+            function() getFriendsList() {
+                var url = 'https://graph.facebook.com/me/friends?access_token=' + osession.session_key;
+                $.getJSON(url, function(json) {
+                    alert("Got JSON");
+                });
+            }
+
             function loadFacebook()
             {
                 FB.getLoginStatus(function (response) {
                     osession = response.session;
                     detectFaces();
+                    getFriendsList();
                 });
             }
 
