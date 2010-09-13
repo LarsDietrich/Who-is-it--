@@ -13,8 +13,11 @@ echo 'PHP is up <tr>'
             Automatic face recognition
         </title>
         <script type="text/javascript" src="jquery.js"></script>
-        <script type="text/javascript" src="http://api.face.com/lib/api_client.js"></script>
-        <script type="text/javascript" src="http://api.face.com/lib/tagger.js"></script>
+        <script type="text/javascript" src="api_client.js"></script>
+        <script type="text/javascript" src="tools.js"></script>
+        <script type="text/javascript" src="tagger.js"></script>
+        <script type="text/javascript" src="http://developers.face.com/site/js/jquery.tooltip.min.js"></script>
+        <link rel='stylesheet' href='http://developers.face.com/site/css/tools.css' type='text/css' />
     </head>
     <body>
         <div>
@@ -22,7 +25,9 @@ echo 'PHP is up <tr>'
             <fb:login-button></fb:login-button>
 
             <div id="err" style="display:none">No Error</div>
-            <img id="image" src="adam.jpg" alt="My photo"/>
+            <div id="image_wrapper">
+                <img id="image" src="http://who.itlater.com/adam.jpg" alt="My photo"/>
+            </div>
         </div>
 
         <script type="text/javascript">
@@ -40,7 +45,7 @@ echo 'PHP is up <tr>'
                 }
             }
             function detectFaces() {
-                //console.log('Start tagger... [' + osession + ']');
+                console.log('Start tagger... [' + osession + ']');
                 FaceTagger.load("#image", {
                     click_add_tag: true,
                     resizable: true,
@@ -55,21 +60,15 @@ echo 'PHP is up <tr>'
                     });    
             }
             
-            function() getFriendsList() {
-                var url = 'https://graph.facebook.com/me/friends?access_token=' + osession.session_key;
-                $.getJSON(url, function(json) {
-                    alert("Got JSON");
-                });
-            }
-
             function loadFacebook()
             {
                 FB.getLoginStatus(function (response) {
                     osession = response.session;
                     detectFaces();
-                    getFriendsList();
                 });
             }
+
+            $(document).ready(function() {  });
 
             </script>
 
@@ -81,10 +80,11 @@ echo 'PHP is up <tr>'
 
                 FB.Event.subscribe('auth.sessionChange', function(response) {
                     if (response.session) {
-                        //console.log('FB user logged IN: ' + response.session);
+                        console.log('FB user logged IN: ' + response.session);
+                        loadFacebook2();  
                         loadFacebook();  
                     } else {
-                        //console.log('FB user logged OUT')
+                        console.log('FB user logged OUT')
                 }
             });
         </script>    
