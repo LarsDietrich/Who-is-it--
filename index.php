@@ -46,7 +46,7 @@ else
             </div>
 
             <div id="err" style="display:none">No Error</div>
-            <div id="image_wrapper">
+            <div id="image_wrapper" style="height:400px; width:400px;">
                 <img id="image" 
 <?php
                 if ($DEBUG)
