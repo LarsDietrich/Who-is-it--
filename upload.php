@@ -61,8 +61,8 @@ if (!$error)
         </title>
     </head>
     <body>
-<h1>Recognize your friends on a photo</h1>
-<h2>Just upload a simple jpg/gif image and watch us find who the people are</h2>
+<!--h1>Recognize your friends on a photo</h1-->
+<!--h2>Just upload a simple jpg/gif image and watch us find who the people are</h2-->
 <br/> 
 
 <?php
